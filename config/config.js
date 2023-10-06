@@ -5,6 +5,7 @@ const development = {
     username: "myuser",
     password: "mypassword",
     database: "mydb",
+    port: 5433
   },
   logLevel: "debug",
 };
@@ -14,6 +15,7 @@ const test = {
     username: "myuser",
     password: "mypassword",
     database: "testdb",
+    port: 5434
   },
   logLevel: "silent",
 };

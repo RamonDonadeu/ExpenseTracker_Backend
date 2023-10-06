@@ -15,7 +15,6 @@ const checkCredentials = async (body) => {
         if (result) {
           resolve(user);
         } else {
-          console.log("Passwords don't match");
           resolve(false);
         }
       }

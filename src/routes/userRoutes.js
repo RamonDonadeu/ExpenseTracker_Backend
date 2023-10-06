@@ -10,4 +10,6 @@ router.put('/', userController.updateUser);
 
 router.post('/login', userController.login);
 
+router.post('/refreshToken', userController.refreshToken);
+
 module.exports = router;

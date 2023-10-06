@@ -8,7 +8,7 @@ const pool = new Pool({
   host: envConfig.database.host,
   database: envConfig.database.database,
   password: envConfig.database.password,
-  port: 5433,
+  port: envConfig.database.port,
 });
 
 module.exports = { pool };

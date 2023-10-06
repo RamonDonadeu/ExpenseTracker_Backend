@@ -15,17 +15,25 @@ app.use(express.json());
 
 // Middleware function to log incoming requests
 const logger = (req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
-  next();
+    console.log(`${req.method} ${req.url}`);
+    next();
 };
 
 // Register middleware function for all incoming requests
-app.use(logger);
+
+if (process.env.NODE_ENV === "dev") {
+  app.use(logger);
+}
 
 // Check the acces token except if url is /users
 
 app.use(async (req, res, next) => {
-  if ((req.url === "/api/users" || req.url === "/api/users/login") && req.method === "POST") {
+  if (
+    (req.url === "/api/users" ||
+      req.url === "/api/users/login" ||
+      req.url === "/api/users/refreshToken") &&
+    req.method === "POST"
+  ) {
     next();
   } else {
     await verifyToken(req, res, next);
@@ -41,3 +49,5 @@ app.use("/api/users", userRouter);
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
+
+module.exports = { app };
