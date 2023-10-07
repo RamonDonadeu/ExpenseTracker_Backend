@@ -1,14 +1,15 @@
-const userServices = require("../services/userService");
-const checkCredentials = require("../utils/checkCredentials");
-const bcrypt = require("bcrypt");
-const generateAccessToken = require("../utils/generateAccessToken");
-const generateRefreshToken = require("../utils/generateRefreshToken");
-const jwt = require("jsonwebtoken");
-const tokensService = require("../services/tokensService");
+import userServices from "../services/userService.js";
+import checkCredentials from "../utils/checkCredentials.js";
+import { hash } from "bcrypt";
+import generateAccessToken from "../utils/generateAccessToken.js";
+import generateRefreshToken from "../utils/generateRefreshToken.js";
+import jwt from "jsonwebtoken";
+const { verify } = jwt;
+import tokensService from "../services/tokensService.js";
 
 const getUser = async (req, res) => {
   let token = req.headers.authorization.split("Bearer ")[1];
-  const decoded = jwt.verify(token, process.env.JWT_SECRET).user;
+  const decoded = verify(token, process.env.JWT_SECRET).user;
 
   const id = decoded.id;
   if (!id) return res.status(400).send("Id is required");
@@ -31,7 +32,7 @@ const createUser = async (req, res) => {
   if (user) return res.status(400).send("Email already exists");
 
   const saltRounds = 10;
-  const hashedPassword = await bcrypt.hash(body.password, saltRounds);
+  const hashedPassword = await hash(body.password, saltRounds);
 
   const newUser = {
     email: body.email,
@@ -74,7 +75,8 @@ const updateUser = async (req, res) => {
 
 const login = async (req, res) => {
   const { body } = req;
-  if (!body || Object.keys(body).length === 0) return res.status(400).send("Body is required");
+  if (!body || Object.keys(body).length === 0)
+    return res.status(400).send("Body is required");
   if (!body.email) return res.status(400).send("Email is required");
   if (!body.password) return res.status(400).send("Password is required");
 
@@ -106,7 +108,7 @@ const refreshToken = async (req, res) => {
   if (!body) return res.status(400).send("Body is required");
   const bearerToken = req.headers.authorization.split("Bearer ")[1];
 
-  const decoded = jwt.verify(bearerToken, process.env.JWT_SECRET);
+  const decoded = verify(bearerToken, process.env.JWT_SECRET);
   const user = decoded.user;
 
   // Check that access token is the same as the one stored in the database
@@ -150,4 +152,4 @@ const refreshToken = async (req, res) => {
   res.json(updatedUser);
 };
 
-module.exports = { getUser, createUser, updateUser, login, refreshToken };
+export default { getUser, createUser, updateUser, login, refreshToken };

@@ -1,9 +1,10 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
+const { sign } = jwt;
 
 const generateRefreshToken = async (user) => {
-  return jwt.sign({ user }, process.env.JWT_REFRESH_SECRET, {
+  return sign({ user }, process.env.JWT_REFRESH_SECRET, {
     expiresIn: "7d",
   });
 };
 
-module.exports = generateRefreshToken;
+export default generateRefreshToken;

@@ -1,4 +1,4 @@
-const pool = require("../databaseConection").pool;
+import pool from "../databaseConection.js";
 
 const getTokensByUserId = async (userId) => {
   try {
@@ -50,4 +50,4 @@ const deleteTokens = async (user_id) => {
   }
 };
 
-module.exports = { getTokensByUserId, setTokens, updateTokens, deleteTokens };
+export default { getTokensByUserId, setTokens, updateTokens, deleteTokens };

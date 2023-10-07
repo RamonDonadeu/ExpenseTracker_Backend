@@ -1,12 +1,12 @@
-const getUserByEmail = require("../services/userService").getUserByEmail;
-const bcrypt = require("bcrypt");
+import userService from "../services/userService.js";
+import { compare } from "bcrypt";
 
 const checkCredentials = async (body) => {
   const { email, password } = body;
-  const user = await getUserByEmail(email);
+  const user = await userService.getUserByEmail(email);
   if (!user) return null;
   return new Promise((resolve, reject) => {
-    bcrypt.compare(password, user.password_hash, function (err, result) {
+    compare(password, user.password_hash, function (err, result) {
       if (err) {
         // Handle error
         console.error(err);
@@ -22,4 +22,4 @@ const checkCredentials = async (body) => {
   });
 };
 
-module.exports = checkCredentials;
+export default checkCredentials;

@@ -1,8 +1,9 @@
-const config = require("../config/config.js");
+import environments from "../config/config.js";
 const environment = process.env.NODE_ENV || "development";
-const envConfig = config.environments[environment];
+const envConfig = environments[environment];
 
-const { Pool } = require("pg");
+import pg from "pg";
+const { Pool } = pg;
 const pool = new Pool({
   user: envConfig.database.username,
   host: envConfig.database.host,
@@ -11,4 +12,4 @@ const pool = new Pool({
   port: envConfig.database.port,
 });
 
-module.exports = { pool };
+export default pool;

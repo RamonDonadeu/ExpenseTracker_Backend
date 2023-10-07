@@ -1,14 +1,13 @@
-const jwt = require("jsonwebtoken");
-const generateAccessToken = require("../utils/generateAccessToken");
-const generateRefreshToken = require("../utils/generateRefreshToken");
-const tokensService = require("../services/tokensService");
+import jwt from "jsonwebtoken";
+const { verify } = jwt;
+import tokensService from "../services/tokensService.js";
 
 const verifyToken = async (req, res, next) => {
   let token = req.headers.authorization;
   if (!token) res.status(401).send("Token not found");
   token = token.split("Bearer ")[1];
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = verify(token, process.env.JWT_SECRET);
     // Check auth token is the same in DB
     const tokens = await tokensService.getTokensByUserId(decoded.user.id);
     if (tokens === undefined || tokens.auth_token !== token) {
@@ -22,4 +21,4 @@ const verifyToken = async (req, res, next) => {
   }
 };
 
-module.exports = verifyToken;
+export default verifyToken;

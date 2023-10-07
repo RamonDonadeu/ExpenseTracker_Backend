@@ -1,15 +1,15 @@
 // setupTests.js
 
-const fs = require("fs").promises;
-const path = require("path");
-const { pool } = require("../../src/databaseConection");
+import { promises as fs } from "fs";
+import { join } from "path";
+import pool from "../../src/databaseConection.js";
 
 async function resetDatabase() {
-  const initSqlPath = path.join(__dirname, "./init.sql");
+  const initSqlPath = join(process.cwd(), "testing", "utils", "init.sql");
   const initSql = await fs.readFile(initSqlPath, "utf8");
-
+  pool.pool;
   await pool.connect();
   await pool.query(initSql);
 }
 
-module.exports = { resetDatabase };
+export default resetDatabase;

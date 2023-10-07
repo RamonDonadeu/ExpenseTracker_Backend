@@ -1,27 +1,28 @@
-const express = require("express");
-const process = require("process");
-const userRouter = require("./routes/userRoutes.js");
-const verifyToken = require("./middleware/verifyToken.js");
+import express, { json } from "express";
+import { env } from "process";
+import userRouter from "./routes/userRoutes.js";
+import verifyToken from "./middleware/verifyToken.js";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = env.PORT || 3000;
 
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 
 // Middleware
 
 // Middleware function to parse incoming requests with JSON payloads
-app.use(express.json());
+app.use(json());
 
 // Middleware function to log incoming requests
 const logger = (req, res, next) => {
-    console.log(`${req.method} ${req.url}`);
-    next();
+  console.log(`${req.method} ${req.url}`);
+  next();
 };
 
 // Register middleware function for all incoming requests
 
-if (process.env.NODE_ENV === "dev") {
+if (env.NODE_ENV === "dev") {
   app.use(logger);
 }
 
@@ -50,4 +51,4 @@ app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
 
-module.exports = { app };
+export default app;

@@ -5,7 +5,7 @@ const development = {
     username: "myuser",
     password: "mypassword",
     database: "mydb",
-    port: 5433
+    port: 5433,
   },
   logLevel: "debug",
 };
@@ -15,7 +15,7 @@ const test = {
     username: "myuser",
     password: "mypassword",
     database: "testdb",
-    port: 5434
+    port: 5434,
   },
   logLevel: "silent",
 };
@@ -29,4 +29,4 @@ const production = {
   logLevel: "info",
 };
 const environments = { production, test, development };
-module.exports = { environments };
+export default environments;

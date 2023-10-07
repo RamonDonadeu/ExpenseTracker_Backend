@@ -1,4 +1,4 @@
-const pool = require("../databaseConection").pool;
+import pool from "../databaseConection.js";
 
 const getUser = async (userId) => {
   try {
@@ -53,7 +53,7 @@ const updateUser = async (user) => {
   }
 };
 
-module.exports = {
+export default {
   getUser,
   createUser,
   updateUser,
