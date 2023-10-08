@@ -14,6 +14,8 @@ const verifyToken = async (req, res, next) => {
       throw new Error("Invalid token");
     }
     req.user = decoded;
+    // set to the request body the user id from the token
+    req.body.user_id = decoded.user.id;
     next();
   } catch (error) {
     console.log("error", error);

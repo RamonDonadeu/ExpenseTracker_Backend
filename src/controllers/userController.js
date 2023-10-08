@@ -44,12 +44,8 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const { body } = req;
-  if (!body) return res.status(400).send("Body is required");
-  // Check if body has id
-  if (!body.id) return res.status(400).send("Id is required");
-  // Check if user exists
-  const user = await userServices.getUser(body.id);
-  if (!user) return res.status(404).send("User not found");
+  if (!body || Object.keys(body).length === 0)
+    return res.status(400).send("Body is required");
   // Check if body has full_name and date_of_birth
   if (!body.full_name) return res.status(400).send("Full name is required");
   if (!body.date_of_birth)
@@ -60,12 +56,15 @@ const updateUser = async (req, res) => {
     return res
       .status(400)
       .send("Date of birth format is invalid. Should be DD/MM/YYYY");
+  //Check date of birth is valid
   // Format date of birth to POSTGRES Date format from DD/MM/YYYY
   const [day, month, year] = body.date_of_birth.split("/");
   const dateOfBirth = new Date(`${year}-${month}-${day}`);
-  // Check if date is valid
-  if (isNaN(dateOfBirth.getTime()))
-    return res.status(400).send("Date of birth is invalid");
+
+  // CHeck if date of birth is in the future
+  const today = new Date();
+  if (dateOfBirth > today)
+    return res.status(400).send("Date of birth cannot be in the future");
 
   const userToUpdate = { ...body, date_of_birth: dateOfBirth };
 
@@ -105,7 +104,6 @@ const login = async (req, res) => {
 // Import necessary modules
 const refreshToken = async (req, res) => {
   const { body } = req;
-  if (!body) return res.status(400).send("Body is required");
   const bearerToken = req.headers.authorization.split("Bearer ")[1];
 
   const decoded = verify(bearerToken, process.env.JWT_SECRET);
